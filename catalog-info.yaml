@@ -1,0 +1,66 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hoplite-poi-backend-app-dev
+  annotations:
+    argocd/app-name: hoplite-poi-backend-app-dev
+    backstage.io/kubernetes-id: hoplite-poi-backend-app
+    backstage.io/kubernetes-namespace: hoplite
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh23-demo/hoplite-backend
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/dev-pipelines/ns/hoplite/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/k8s/ns/hoplite/deployments/hoplite-poi-backend-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/#https://github.com/rhdh23-demo/hoplite-backend?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/hoplite"
+  system: workshop-system-hoplite
+  providesApis:
+    - backend-api-hoplite
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-hoplite
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/hoplite"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: backend-api-hoplite
+  description: API surface used by workshop attendees to initialize and load parks data
+  links:
+    - url: http://hoplite-poi-backend-app-hoplite.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh23-demo/hoplite-backend/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/hoplite"
+  system: workshop-system-hoplite
+  definition:
+    $text: https://github.com/rhdh23-demo/hoplite-backend/tree/main/src/main/resources/META-INF/openapi.yaml
